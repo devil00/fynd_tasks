@@ -37,7 +37,7 @@ class MovieSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movie
-        fields = ('name', 'score', 'popularity', 'genre', 'director', 'id')
+        fields = ('name', 'imdb_score', 'popularity', 'genre', 'director', 'id')
         read_only_fields = ('id',)
 
     def create(self, validated_data):
@@ -51,14 +51,14 @@ class MovieSerializer(serializers.ModelSerializer):
         director = validated_data.pop('director')['name']
         
         # create director instance.
-        created_director = Director.objects.create(name=director)
+        created_director, _ = Director.objects.get_or_create(name=director)
         validated_data.update({'director': created_director})
 
         created_genres = []
         
         # Create genre instances.
         for genre in genres:
-            created_genre = Genre.objects.create(name=genre)
+            created_genre, _ = Genre.objects.get_or_create(name=genre)
             created_genres.append(created_genre)
 
         movie = Movie.objects.create(**validated_data)
@@ -82,13 +82,14 @@ class MovieSerializer(serializers.ModelSerializer):
         :returns: an updated movie instance.
         """
         genres = validated_data.pop('genre')
-        director = validated_data.pop('director')['name']
+        director_name = validated_data.pop('director')['name']
+        director = Director.objects.get_or_create(name=director_name)
 
         for g in genres:
             instance.genre.update_or_create(name=g)
 
-        instance.director.name = director
-        instance.score = validated_data.get('score')
+        instance.director = director
+        instance.imdb_score = validated_data.get('imdb_score')
         instance.name = validated_data.get('name')
         instance.popularity = validated_data.get('popularity')
 

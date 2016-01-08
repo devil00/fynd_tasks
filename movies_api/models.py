@@ -28,7 +28,7 @@ class Movie(models.Model):
     model and many to many relationship with Genre model.
     """
     name = models.CharField(max_length=150)
-    score = models.DecimalField(max_digits=5, decimal_places=2)
+    imdb_score = models.DecimalField(max_digits=5, decimal_places=2)
     popularity = models.DecimalField(max_digits=5, decimal_places=2)
     director = models.ForeignKey(Director, on_delete=models.CASCADE)
     genre = models.ManyToManyField(Genre)

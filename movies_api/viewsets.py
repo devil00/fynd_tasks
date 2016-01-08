@@ -2,6 +2,7 @@
 All the REST resources related to a movie api will be defined in this module.
 """
 from rest_framework import mixins, viewsets, filters
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Movie
 from .permissions import UserAccessPermission
@@ -22,7 +23,7 @@ class MovieViewSet(viewsets.ModelViewSet):
     """
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
-    permission_classes = (UserAccessPermission,)
+    permission_classes = (IsAuthenticated, UserAccessPermission,)
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('name', 'score', 'popularity', 'director__name', 'genre__name',)
+    search_fields = ('name', 'imdb_score', 'popularity', 'director__name', 'genre__name',)
     ordering_fields = ('name', )
