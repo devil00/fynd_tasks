@@ -5,7 +5,7 @@ class Director(models.Model):
     """
     Director model.
     """
-    name = models.CharField(max_length=150)
+    name = models.CharField(max_length=150, unique=True)
 
     def __str__(self):
         return "Director: {}".format(self.name)
@@ -15,7 +15,7 @@ class Genre(models.Model):
     """
     Genre model.
     """
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return "Genere: {}".format(self.name)

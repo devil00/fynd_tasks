@@ -83,7 +83,7 @@ class MovieSerializer(serializers.ModelSerializer):
         """
         genres = validated_data.pop('genre')
         director_name = validated_data.pop('director')['name']
-        director = Director.objects.get_or_create(name=director_name)
+        director, _ = Director.objects.get_or_create(name=director_name)
 
         for g in genres:
             instance.genre.update_or_create(name=g)
@@ -96,4 +96,3 @@ class MovieSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
-
